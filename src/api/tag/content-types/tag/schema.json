@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tags",
+  "info": {
+    "singularName": "tag",
+    "pluralName": "tags",
+    "displayName": "Tag",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Name": {
+      "type": "string",
+      "required": true
+    },
+    "documents": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::document.document",
+      "mappedBy": "tags"
+    }
+  }
+}

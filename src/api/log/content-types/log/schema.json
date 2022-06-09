@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "logs",
+  "info": {
+    "singularName": "log",
+    "pluralName": "logs",
+    "displayName": "Log",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "EntityName": {
+      "type": "string",
+      "required": true
+    },
+    "action": {
+      "type": "string",
+      "required": true
+    },
+    "loggedAt": {
+      "type": "datetime",
+      "required": true
+    }
+  }
+}
