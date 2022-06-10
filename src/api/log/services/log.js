@@ -6,4 +6,23 @@
 
 const { createCoreService } = require('@strapi/strapi').factories;
 
-module.exports = createCoreService('api::log.log');
+module.exports = createCoreService('api::log.log', ({strapi}) => ({
+    async track(entityName, action) {
+        if (!entityName || !action) return;
+        
+        try {
+            let result = await strapi.db.query("api::log.log").create({
+                data: {
+                    EntityName: entityName,
+                    action
+                }
+            })
+
+            return;
+        } catch(e) {
+            console.log(e);
+        }
+    }
+})
+
+);
