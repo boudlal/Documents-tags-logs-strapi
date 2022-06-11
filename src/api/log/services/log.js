@@ -3,7 +3,6 @@
 /**
  * log service.
  */
-
 const { createCoreService } = require('@strapi/strapi').factories;
 
 module.exports = createCoreService('api::log.log', ({strapi}) => ({
@@ -11,10 +10,11 @@ module.exports = createCoreService('api::log.log', ({strapi}) => ({
         if (!entityName || !action) return;
         
         try {
-            let result = await strapi.db.query("api::log.log").create({
+            await strapi.db.query("api::log.log").create({
                 data: {
                     EntityName: entityName,
-                    action
+                    action,
+                    loggedAt: new Date()
                 }
             })
 
