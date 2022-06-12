@@ -8,12 +8,12 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true,
+    "draftAndPublish": false,
     "timestamps": false
   },
   "pluginOptions": {},
   "attributes": {
-    "EntityName": {
+    "entityName": {
       "type": "string",
       "required": true
     },

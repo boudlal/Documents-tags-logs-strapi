@@ -12,7 +12,7 @@ module.exports = createCoreService('api::log.log', ({strapi}) => ({
         try {
             await strapi.db.query("api::log.log").create({
                 data: {
-                    EntityName: entityName,
+                    entityName: entityName,
                     action,
                     loggedAt: new Date()
                 }
