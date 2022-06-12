@@ -4,7 +4,8 @@
   "info": {
     "singularName": "config",
     "pluralName": "configs",
-    "displayName": "Config"
+    "displayName": "Config",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -13,7 +14,8 @@
   "attributes": {
     "key": {
       "type": "string",
-      "required": true
+      "required": true,
+      "unique": true
     },
     "value": {
       "type": "string",

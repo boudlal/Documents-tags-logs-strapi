@@ -12,10 +12,11 @@ module.exports = createCoreService('api::document.document', ({strapi}) => ({
         console.log('----start importing');
         let trx = await strapi.db.connection.transaction();
         try {
-            let already_imported = await strapi.db.query("api::config.config").findOne({key: "already_imported"});
-            if (already_imported && already_imported.value == "true") {
-                return {success: false, message: "Documents already imported"}
-            }
+            let already_imported = await strapi.db.connection("configs").select('value').where({ key: 'already_imported' });
+            
+            if (Array.isArray(already_imported) && already_imported[0] && already_imported[0].value == "true") {
+                return {success: false, message: "already granted"}
+            } 
 
             let dir = path.resolve(__dirname, '../../../../test-back-documents.csv')
             let documents = await csv().fromFile(dir);
@@ -66,13 +67,70 @@ module.exports = createCoreService('api::document.document', ({strapi}) => ({
     
             await strapi.db.connection("logs").transacting(trx).insert(logs);
             
-            await strapi.db.connection("config").transacting(trx).insert({key: "already_imported", value: "true"});
+            await strapi.db.connection("configs").transacting(trx).insert({key: "already_imported", value: "true"});
     
             // Commit transaction
             await trx.commit();
     
             console.log("Successfully imported")
             return {success: true, message: "Successfully imported"}
+    
+    
+        } catch (error) {
+            console.log('-----error', error);
+            // Rollback transaction
+            await trx.rollback()
+            return {success: false, message: "Internal server error"}
+        }
+    },
+
+    async updatePermissions() {
+        // console.log('----start updatePermissions');
+        let trx = await strapi.db.connection.transaction();
+        try {
+            let already_permissions_granted = await strapi.db.connection("configs").select('value')
+            .where({ key: 'already_permissions_granted' });
+            if (Array.isArray(already_permissions_granted) && already_permissions_granted[0] && already_permissions_granted[0].value == "true") {
+                return {success: false, message: "already granted"}
+            } 
+
+
+            if (already_permissions_granted && already_permissions_granted.value == "true") {
+                return {success: false, message: "Permissions already granted"}
+            }
+
+            let permissions_payload = [
+                {"action": "api::document.document.find"},
+                {"action": "api::document.document.findOne"},
+                {"action": "api::document.document.create"},
+                {"action": "api::document.document.update"},
+                {"action": "api::document.document.delete"},
+                {"action": "api::document.document.import"},
+                {"action": "api::tag.tag.find"},
+                {"action": "api::tag.tag.findOne"},
+                {"action": "api::tag.tag.create"},
+                {"action": "api::tag.tag.update"},
+                {"action": "api::tag.tag.delete"},
+            ]
+
+            let first_id = await strapi.db.connection("up_permissions").transacting(trx).insert(permissions_payload)    
+            first_id = first_id[0]
+
+            let permissions_roles_links_payload = [];
+
+            for (let i = 0; i < permissions_payload.length; i++) {
+                permissions_roles_links_payload.push({role_id: 2, permission_id: i+first_id })
+            }
+
+            await strapi.db.connection("up_permissions_role_links").transacting(trx).insert(permissions_roles_links_payload)    
+            
+            await strapi.db.connection("configs").transacting(trx).insert({key: "already_permissions_granted", value: "true"});
+
+            // Commit transaction
+            await trx.commit();
+    
+            console.log("Successfully granted")
+            return {success: true, message: "Successfully granted"}
     
     
         } catch (error) {

@@ -4,6 +4,9 @@ module.exports = {
         method: 'GET',
         path: '/documents/import', 
         handler: 'document.import',
-      },
+        config: {
+          auth: false
+        }
+      }
     ]
   }
