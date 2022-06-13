@@ -1,21 +1,23 @@
 ## INSTALLATION
 
-Exécuter `yarn install`
+Exécutez `yarn install`
 
-Créer une freshe base de données mysql `xyz`
+Créez une freshe base de données MySQL `xyz`
 
-Copier le content de`.env.example` à un new fichier`.env`
+Copiez le contenu de`.env.example` dans un nouveau fichier`.env`
 
-Modifier les informations de connexion à mysql Dans`.env`
+Modifiez les informations de la base de données MySQL dans `.env`
+
+Exécutez `npm run start`
 
 ## Importation des documents
 
 Il y a 2 méthodes pour importer les documents et les tags.
 
 ### Méthode 1
-Envoyer un GET requête à `http://.../api/documents/import`
+Envoyez un GET requête à `http://.../api/documents/import`
 
 ### Méthode 2
-Décommenter cette ligne `// strapi.services["api::document.document"].import();` dans `/src/index` 
+Décommentez cette ligne `// strapi.services["api::document.document"].import();` dans `/src/index.js` 
 
-### NOTE: les documents peuvent être importé seulement pour une seule fois.
+### NOTE: Les documents ne peuvent être importés qu'une seule fois.
